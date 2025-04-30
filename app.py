@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
-from logger import log_request
+from logger.logger import get_logs, log_request
+
 
 app = Flask(__name__)
 
@@ -13,6 +14,13 @@ def login():
         log_request(request)
         return 'Invalid username or password.'
     return render_template('login.html')
+
+
+@app.route('/logs', methods=['GET'])
+def logged():
+    logs = get_logs()
+    return render_template('logs.html',logs = logs)
+
 
 @app.route('/admin')
 def admin():

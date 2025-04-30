@@ -1,13 +1,28 @@
 import sqlite3
 from datetime import datetime
 
+def get_logs():
+    
+    """Fetch all logs from the honeypot database."""
+    conn = sqlite3.connect('database/honeypot.db')
+    c = conn.cursor()
+    
+    c.execute('SELECT * FROM logs')  
+    logs = c.fetchall()
+    
+    conn.close()
+    return logs
+
+
+
 def log_request(req):
+    
     ip = req.remote_addr
     endpoint = req.path
     user_agent = req.headers.get('User-Agent')
     data = dict(req.form) if req.form else None
 
-    conn = sqlite3.connect('honeypot.db')
+    conn = sqlite3.connect('database/honeypot.db')
     c = conn.cursor()
     c.execute('''
         CREATE TABLE IF NOT EXISTS logs (
