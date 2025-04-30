@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Honeypot Logs</title>
+    <style>
+        body { font-family: Arial; background: #f0f0f0; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { padding: 8px 12px; border: 1px solid #ccc; text-align: left; }
+        th { background: #333; color: white; }
+        tr:nth-child(even) { background: #eee; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Honeypot Access Logs Location</h1>
+    <table border="1">
+        <tr>
+          <th>IP</th>
+          <th>Path</th>
+          <th>Method</th>
+          <th>Country</th>
+          <th>City</th>
+          <th>Time</th>
+        </tr>
+        {% for location in locations %}
+        <tr>
+          <td>{{ location[1] }}</td>
+          <td>{{ location[2] }}</td>
+          <td>{{ location[3] }}</td>
+          <td>{{ location[4] }}</td>
+          <td>{{ location[5] }}</td>
+          <td>{{ location[6] }}</td>
+        </tr>
+        {% endfor %}
+      </table>      
+</body>
