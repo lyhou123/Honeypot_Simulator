@@ -21,6 +21,7 @@ This project is a simple **Honeypot Simulator** built with **Python**, **Flask**
 
 ```bash
 python view_logged.py
+```
 
 
 ## Technologies Used
