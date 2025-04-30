@@ -20,7 +20,7 @@ This project is a simple **Honeypot Simulator** built with **Python**, **Flask**
 - running this command to see all who route to the admin page and their ip address.
 
 ```bash
-python view_logged.py
+localhost:5000/logs
 ```
 
 
