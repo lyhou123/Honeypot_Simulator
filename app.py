@@ -1,8 +1,19 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash
 from logger.logger import get_logs, log_request, ip_location, ip_request
+from validation.brute_force import is_ip_blocked, log_failed_attempt
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+
+ADMIN_USERNAME=os.getenv("ADMIN_USERNAME")
+ADMIN_PASSWORD=os.getenv("ADMIN_PASSWORD")
 
 
 app = Flask(__name__)
+
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route('/')
 def home():
@@ -10,11 +21,34 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+    
+    ip = request.remote_addr
+    
+    if is_ip_blocked(ip):
+        
         log_request(request)
         ip_request(request)
-        return 'Invalid username or password.'
-    return render_template('login.html')
+        
+        flash('Too many failed attempts. Try again later')
+        return redirect(url_for('login'))
+    
+    if request.method == "POST":
+        username = request.form['email'] 
+        password = request.form['password']
+        
+        if username != ADMIN_USERNAME or password != ADMIN_PASSWORD:
+            log_failed_attempt(ip)
+            flash('Invalid credentails. Please Try Again!')
+            return redirect(url_for('login'))
+        
+        # save activity into our database one for simple ip and the last is store with ip location !
+        ip_request(request)
+        log_request(request)
+        return "Welcome !" 
+    
+    return render_template('login.html')   
+               
+     
 
 
 @app.route('/logs', methods=['GET'])
