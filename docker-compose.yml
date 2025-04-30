@@ -1,0 +1,13 @@
+services:
+  honey-pot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: honey-pot
+    image: honey-pot:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development      
